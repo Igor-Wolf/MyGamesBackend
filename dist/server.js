@@ -879,7 +879,7 @@ var forgotPassService = (email) => __async(void 0, null, function* () {
     const user = verifyEmail.user;
     let token = import_jsonwebtoken2.default.sign({ user }, secret, { expiresIn: "1h" });
     token = encodeURIComponent(token);
-    const restEmail = `https://login-model-one.vercel.app/NewPassword/${token}`;
+    const restEmail = `https://my-games-frontend.vercel.app/NewPassword/${token}`;
     const data = yield sendEmail(verifyEmail.email, "Email teste", restEmail, verifyEmail.user);
     response = yield ok(data);
   } else {
@@ -926,7 +926,7 @@ var userAutenticationService = (bodyValue) => __async(void 0, null, function* ()
   } else if (data && secret && data.isActive === false) {
     let token = import_jsonwebtoken2.default.sign({ user }, secret, { expiresIn: "1h" });
     token = encodeURIComponent(token);
-    const restEmail = `https://login-model-one.vercel.app/AutenticateAccount/${token}`;
+    const restEmail = `https://my-games-frontend.vercel.app/AutenticateAccount/${token}`;
     const mail = yield sendEmail2(data.email, "Email teste", restEmail, user);
     response = yield conflict();
   } else {
