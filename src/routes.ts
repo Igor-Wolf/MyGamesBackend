@@ -41,7 +41,8 @@ router.get("/games/metacriticGames", metacriticGames)
 router.get("/games/trendingGames", trendingGames)
 router.get("/games/releases", newReleases)
 router.get("/games/searchGame/:game", searchGame)
-router.get("/games/getGame/:id" , getGameById)
+router.get("/games/getGame/:id", getGameById)
+//------
 
 
 
