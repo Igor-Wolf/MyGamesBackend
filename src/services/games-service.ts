@@ -149,4 +149,84 @@ export const getGameByIdService = async (id : string) => {
       
 
 }
+export const getDlcByIdService = async (id : string) => {
+
+    const response : any = await apiGames.get(`/games/${id}/additions?key=${key}`);
+    
+    
+
+    if (response) {
+        const gameSearch = response.data.results
+        
+        
+        
+        return ok(gameSearch)
+
+    } else {
+        
+        return noContent()
+    }
+      
+
+}
+export const getGameSeriesByIdService = async (id : string) => {
+
+    const response : any = await apiGames.get(`/games/${id}/game-series?key=${key}`);
+    
+    
+
+    if (response) {
+        const gameSearch = response.data.results
+        
+        
+        
+        return ok(gameSearch)
+
+    } else {
+        
+        return noContent()
+    }
+      
+
+}
+export const getParentGamesByIdService = async (id : string) => {
+
+    const response : any = await apiGames.get(`/games/${id}/parent-games?key=${key}`);
+    
+    
+
+    if (response) {
+        const gameSearch = response.data.results
+        
+        
+        
+        return ok(gameSearch)
+
+    } else {
+        
+        return noContent()
+    }
+      
+
+}
+export const getScreenshotsByIdService = async (id : string) => {
+
+    const response : any = await apiGames.get(`/games/${id}/screenshots?key=${key}`);
+    
+    
+
+    if (response) {
+        const gameSearch = response.data.results
+        
+        
+        
+        return ok(gameSearch)
+
+    } else {
+        
+        return noContent()
+    }
+      
+
+}
 

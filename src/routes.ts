@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { autenticateAccountByEmail, createUser, deleteUser, forgotPass, getMyAcount, getProtegido, newPassword, updateUser, userAutentication } from "./controllers/login-controller"
-import { getGameById, metacriticGames, newReleases, searchGame, topGamesAllTime, trendingGames } from "./controllers/games-controller"
+import { getDlcById, getGameById, getGameSeriesById, getParentGamesById, getScreenshotsById, metacriticGames, newReleases, searchGame, topGamesAllTime, trendingGames } from "./controllers/games-controller"
 
 
 const router = Router()
@@ -42,7 +42,18 @@ router.get("/games/trendingGames", trendingGames)
 router.get("/games/releases", newReleases)
 router.get("/games/searchGame/:game", searchGame)
 router.get("/games/getGame/:id", getGameById)
-//------
+
+router.get("/games/getDlc/:id", getDlcById) // lista de dlcs para jogos jogos -> dlc
+router.get("/games/getGameSeries/:id", getGameSeriesById) // lista de jogos da mesma série
+router.get("/games/getParentGames/:id", getParentGamesById) // lista de jogos que originou a dlc  dlc -> jogo
+router.get("/games/getScreenshots/:id", getScreenshotsById) // lista de screenshots
+
+
+
+
+
+
+
 
 
 

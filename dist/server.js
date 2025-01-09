@@ -1135,6 +1135,42 @@ var getGameByIdService = (id) => __async(void 0, null, function* () {
     return noContent();
   }
 });
+var getDlcByIdService = (id) => __async(void 0, null, function* () {
+  const response = yield apiGames.get(`/games/${id}/additions?key=${key}`);
+  if (response) {
+    const gameSearch = response.data.results;
+    return ok(gameSearch);
+  } else {
+    return noContent();
+  }
+});
+var getGameSeriesByIdService = (id) => __async(void 0, null, function* () {
+  const response = yield apiGames.get(`/games/${id}/game-series?key=${key}`);
+  if (response) {
+    const gameSearch = response.data.results;
+    return ok(gameSearch);
+  } else {
+    return noContent();
+  }
+});
+var getParentGamesByIdService = (id) => __async(void 0, null, function* () {
+  const response = yield apiGames.get(`/games/${id}/parent-games?key=${key}`);
+  if (response) {
+    const gameSearch = response.data.results;
+    return ok(gameSearch);
+  } else {
+    return noContent();
+  }
+});
+var getScreenshotsByIdService = (id) => __async(void 0, null, function* () {
+  const response = yield apiGames.get(`/games/${id}/screenshots?key=${key}`);
+  if (response) {
+    const gameSearch = response.data.results;
+    return ok(gameSearch);
+  } else {
+    return noContent();
+  }
+});
 
 // src/controllers/games-controller.ts
 var topGamesAllTime = (req, res) => __async(void 0, null, function* () {
@@ -1163,6 +1199,26 @@ var getGameById = (req, res) => __async(void 0, null, function* () {
   const response = yield getGameByIdService(id);
   res.status(response.statusCode).json(response.body);
 });
+var getDlcById = (req, res) => __async(void 0, null, function* () {
+  const id = req.params.id;
+  const response = yield getDlcByIdService(id);
+  res.status(response.statusCode).json(response.body);
+});
+var getGameSeriesById = (req, res) => __async(void 0, null, function* () {
+  const id = req.params.id;
+  const response = yield getGameSeriesByIdService(id);
+  res.status(response.statusCode).json(response.body);
+});
+var getParentGamesById = (req, res) => __async(void 0, null, function* () {
+  const id = req.params.id;
+  const response = yield getParentGamesByIdService(id);
+  res.status(response.statusCode).json(response.body);
+});
+var getScreenshotsById = (req, res) => __async(void 0, null, function* () {
+  const id = req.params.id;
+  const response = yield getScreenshotsByIdService(id);
+  res.status(response.statusCode).json(response.body);
+});
 
 // src/routes.ts
 var router = (0, import_express.Router)();
@@ -1181,6 +1237,10 @@ router.get("/games/trendingGames", trendingGames);
 router.get("/games/releases", newReleases);
 router.get("/games/searchGame/:game", searchGame);
 router.get("/games/getGame/:id", getGameById);
+router.get("/games/getDlc/:id", getDlcById);
+router.get("/games/getGameSeries/:id", getGameSeriesById);
+router.get("/games/getParentGames/:id", getParentGamesById);
+router.get("/games/getScreenshots/:id", getScreenshotsById);
 var routes_default = router;
 
 // src/app.ts
