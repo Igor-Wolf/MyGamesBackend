@@ -2,6 +2,7 @@ import { response } from "express"
 import { noContent, ok } from "../utils/http-helper"
 import { apiGames } from "../api/apiGames";
 import { getDataAtual, getDataDoisAnosFuturo, getDataDoisMesesAtras } from "../utils/dateGames";
+import { getBannerRepositories } from "../repositories/login-repository";
 
 const key = process.env.KEY_GAMES
 
@@ -29,7 +30,9 @@ export const topGamesAllTimeService = async () => {
         //     //(b.ratings?.[0]?.count || 0) - (a.ratings?.[0]?.count || 0)
              (b.added || 0) -  (a.added || 0)
          );
-        const twentyMost = mostAdded.slice(0,20)
+        const twentyMost = mostAdded.slice(0, 20)
+        
+        twentyMost.sort(() => Math.random() - 0.5)
         
         return ok(twentyMost)
 
@@ -53,6 +56,27 @@ export const metacriticGamesService = async () => {
         const twentyMost = metacritic
         
         return ok(twentyMost)
+
+    } else {
+        
+        return noContent()
+    }
+      
+
+}
+export const getBannerService = async () => {
+
+    
+    const database  = await getBannerRepositories()
+    
+    
+
+    if (database) {
+       
+        
+       
+        
+        return ok(database)
 
     } else {
         

@@ -598,6 +598,36 @@ var findAndModifyActivity = (user) => __async(void 0, null, function* () {
     return { message: "error", error: error.message };
   }
 });
+var getBannerRepositories = () => __async(void 0, null, function* () {
+  const gamesBanner = [
+    {
+      id: 324997,
+      name: "Baldur's Gate III",
+      background_image: "https://media.rawg.io/media/games/699/69907ecf13f172e9e144069769c3be73.jpg"
+    },
+    {
+      id: 409575,
+      name: "Pathfinder: Wrath of the Righteous",
+      background_image: "https://media.rawg.io/media/games/a20/a203f3f5d667e04ce4a2c482c7be3a47.jpg"
+    },
+    {
+      id: 977470,
+      name: "Elden Ring: Shadow of the Erdtree",
+      background_image: "https://media.rawg.io/media/screenshots/0ba/0bae7160eedc1f7d85a8d2db70cf1ec9.jpg"
+    },
+    {
+      id: 59611,
+      name: "Pathfinder: Kingmaker",
+      background_image: "https://media.rawg.io/media/games/4e6/4e6c6259ad910c31261d90b42c45e046.jpg"
+    },
+    {
+      "id": 415171,
+      "name": "Valorant",
+      "background_image": "https://media.rawg.io/media/games/b11/b11127b9ee3c3701bd15b9af3286d20e.jpg"
+    }
+  ];
+  return gamesBanner;
+});
 
 // src/services/login-service.ts
 var import_jsonwebtoken2 = __toESM(require("jsonwebtoken"));
@@ -1077,6 +1107,7 @@ var topGamesAllTimeService = () => __async(void 0, null, function* () {
       )
     );
     const twentyMost = mostAdded.slice(0, 20);
+    twentyMost.sort(() => Math.random() - 0.5);
     return ok(twentyMost);
   } else {
     return noContent();
@@ -1088,6 +1119,14 @@ var metacriticGamesService = () => __async(void 0, null, function* () {
     const metacritic = response.data.results;
     const twentyMost = metacritic;
     return ok(twentyMost);
+  } else {
+    return noContent();
+  }
+});
+var getBannerService = () => __async(void 0, null, function* () {
+  const database = yield getBannerRepositories();
+  if (database) {
+    return ok(database);
   } else {
     return noContent();
   }
@@ -1173,6 +1212,10 @@ var getScreenshotsByIdService = (id) => __async(void 0, null, function* () {
 });
 
 // src/controllers/games-controller.ts
+var getBanner = (req, res) => __async(void 0, null, function* () {
+  const response = yield getBannerService();
+  res.status(response.statusCode).json(response.body);
+});
 var topGamesAllTime = (req, res) => __async(void 0, null, function* () {
   const response = yield topGamesAllTimeService();
   res.status(response.statusCode).json(response.body);
@@ -1231,6 +1274,7 @@ router.post("/login/autentication", userAutentication);
 router.post("/login/newPassword", newPassword);
 router.patch("/login/update/:user", updateUser);
 router.delete("/login/delete/:user", deleteUser);
+router.get("/games/banner", getBanner);
 router.get("/games/topGames", topGamesAllTime);
 router.get("/games/metacriticGames", metacriticGames);
 router.get("/games/trendingGames", trendingGames);

@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { autenticateAccountByEmail, createUser, deleteUser, forgotPass, getMyAcount, getProtegido, newPassword, updateUser, userAutentication } from "./controllers/login-controller"
-import { getDlcById, getGameById, getGameSeriesById, getParentGamesById, getScreenshotsById, metacriticGames, newReleases, searchGame, topGamesAllTime, trendingGames } from "./controllers/games-controller"
+import { getBanner, getDlcById, getGameById, getGameSeriesById, getParentGamesById, getScreenshotsById, metacriticGames, newReleases, searchGame, topGamesAllTime, trendingGames } from "./controllers/games-controller"
 
 
 const router = Router()
@@ -35,7 +35,7 @@ router.delete("/login/delete/:user", deleteUser)
 
 //------------------------------------------------------------------------------------ GET
 
-
+router.get("/games/banner", getBanner)
 router.get("/games/topGames", topGamesAllTime)
 router.get("/games/metacriticGames", metacriticGames)
 router.get("/games/trendingGames", trendingGames)

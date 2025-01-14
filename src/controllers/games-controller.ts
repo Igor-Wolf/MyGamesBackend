@@ -1,7 +1,15 @@
 import express, { Request, Response } from "express";
-import { getDlcByIdService, getGameByIdService, getGameSeriesByIdService, getParentGamesByIdService, getScreenshotsByIdService, metacriticGamesService, newReleasesService, searchGameService, topGamesAllTimeService, trendingGamesService } from "../services/games-service";
+import { getBannerService, getDlcByIdService, getGameByIdService, getGameSeriesByIdService, getParentGamesByIdService, getScreenshotsByIdService, metacriticGamesService, newReleasesService, searchGameService, topGamesAllTimeService, trendingGamesService } from "../services/games-service";
 
 
+export const getBanner = async (req: Request, res: Response) => {
+   
+
+  const response = await getBannerService()
+  res.status(response.statusCode).json(response.body)
+
+
+}
 export const topGamesAllTime = async (req: Request, res: Response) => {
    
 
