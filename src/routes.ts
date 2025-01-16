@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { autenticateAccountByEmail, createUser, deleteUser, forgotPass, getMyAcount, getProtegido, newPassword, updateUser, userAutentication } from "./controllers/login-controller"
 import { getBanner, getDlcById, getGameById, getGameSeriesById, getParentGamesById, getScreenshotsById, metacriticGames, newReleases, searchGame, topGamesAllTime, trendingGames } from "./controllers/games-controller"
+import { addGameList, addGameListDescription, addWishList, addWishListDescription, createUserList, deleteUserList, getUserGameList, getUserWishList, removeGameList, removeWishList } from "./controllers/myList-constroller"
 
 
 const router = Router()
@@ -49,6 +50,34 @@ router.get("/games/getParentGames/:id", getParentGamesById) // lista de jogos qu
 router.get("/games/getScreenshots/:id", getScreenshotsById) // lista de screenshots
 
 
+
+
+//----------------------------------------------------------------------------------------------------------- MyList / Wishlist
+
+//------------------------------------------------------------------------------------ GET
+
+router.get("/myList/create", createUserList)
+
+
+
+router.get("/myList/GameList", getUserGameList)
+
+router.get("/myList/WishList", getUserWishList)
+
+//------------------------------------------------------------------------------------ PATCH
+
+router.patch("/myList/addGameList", addGameList)
+router.patch("/myList/removeGameList/:id", removeGameList)
+router.patch("/myList/addGameListDescription", addGameListDescription)
+
+
+router.patch("/myList/addWishList", addWishList)
+router.patch("/myList/removeWishList/:id", removeWishList)
+router.patch("/myList/addWishListDescription", addWishListDescription)
+
+//------------------------------------------------------------------------------------ DELETE
+
+router.delete("/myList/delete", deleteUserList)
 
 
 

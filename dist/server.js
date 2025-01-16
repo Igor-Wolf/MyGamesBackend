@@ -207,9 +207,9 @@ var require_main = __commonJS({
       return "";
     }
     function _instructions(result, dotenvKey) {
-      let uri2;
+      let uri3;
       try {
-        uri2 = new URL(dotenvKey);
+        uri3 = new URL(dotenvKey);
       } catch (error) {
         if (error.code === "ERR_INVALID_URL") {
           const err = new Error("INVALID_DOTENV_KEY: Wrong format. Must be in valid uri format like dotenv://:key_1234@dotenvx.com/vault/.env.vault?environment=development");
@@ -218,13 +218,13 @@ var require_main = __commonJS({
         }
         throw error;
       }
-      const key2 = uri2.password;
+      const key2 = uri3.password;
       if (!key2) {
         const err = new Error("INVALID_DOTENV_KEY: Missing key part");
         err.code = "INVALID_DOTENV_KEY";
         throw err;
       }
-      const environment = uri2.searchParams.get("environment");
+      const environment = uri3.searchParams.get("environment");
       if (!environment) {
         const err = new Error("INVALID_DOTENV_KEY: Missing environment part");
         err.code = "INVALID_DOTENV_KEY";
@@ -522,7 +522,6 @@ var deleteUsers = (user) => __async(void 0, null, function* () {
       return { message: "not found" };
     }
   } catch (error) {
-    console.error("Error deleting food:", error);
     return { message: "error", error: error.message };
   }
 });
@@ -597,36 +596,6 @@ var findAndModifyActivity = (user) => __async(void 0, null, function* () {
     console.error("Error updating password:", error);
     return { message: "error", error: error.message };
   }
-});
-var getBannerRepositories = () => __async(void 0, null, function* () {
-  const gamesBanner = [
-    {
-      id: 324997,
-      name: "Baldur's Gate III",
-      background_image: "https://media.rawg.io/media/games/699/69907ecf13f172e9e144069769c3be73.jpg"
-    },
-    {
-      id: 409575,
-      name: "Pathfinder: Wrath of the Righteous",
-      background_image: "https://media.rawg.io/media/games/a20/a203f3f5d667e04ce4a2c482c7be3a47.jpg"
-    },
-    {
-      id: 977470,
-      name: "Elden Ring: Shadow of the Erdtree",
-      background_image: "https://media.rawg.io/media/screenshots/0ba/0bae7160eedc1f7d85a8d2db70cf1ec9.jpg"
-    },
-    {
-      id: 59611,
-      name: "Pathfinder: Kingmaker",
-      background_image: "https://media.rawg.io/media/games/4e6/4e6c6259ad910c31261d90b42c45e046.jpg"
-    },
-    {
-      "id": 415171,
-      "name": "Valorant",
-      "background_image": "https://media.rawg.io/media/games/b11/b11127b9ee3c3701bd15b9af3286d20e.jpg"
-    }
-  ];
-  return gamesBanner;
 });
 
 // src/services/login-service.ts
@@ -910,7 +879,12 @@ var forgotPassService = (email) => __async(void 0, null, function* () {
     let token = import_jsonwebtoken2.default.sign({ user }, secret, { expiresIn: "1h" });
     token = encodeURIComponent(token);
     const restEmail = `https://my-games-frontend.vercel.app/NewPassword/${token}`;
-    const data = yield sendEmail(verifyEmail.email, "Email teste", restEmail, verifyEmail.user);
+    const data = yield sendEmail(
+      verifyEmail.email,
+      "Email teste",
+      restEmail,
+      verifyEmail.user
+    );
     response = yield ok(data);
   } else {
     response = yield noContent();
@@ -986,7 +960,10 @@ var newPasswordService = (bodyValue, authHeader) => __async(void 0, null, functi
   const decoded = yield auth(authHeader);
   let response = null;
   if (decoded) {
-    const data = yield findAndModifyPassword(decoded.user, bodyValue.passwordHash);
+    const data = yield findAndModifyPassword(
+      decoded.user,
+      bodyValue.passwordHash
+    );
     response = yield ok(data);
   } else {
     response = yield badRequest();
@@ -1088,18 +1065,58 @@ var getDataAtual = () => __async(void 0, null, function* () {
   return `${ano}-${mes}-${dia}`;
 });
 
+// src/repositories/games-repository.ts
+var getBannerRepositories = () => __async(void 0, null, function* () {
+  const gamesBanner = [
+    {
+      id: 324997,
+      name: "Baldur's Gate III",
+      background_image: "https://media.rawg.io/media/games/699/69907ecf13f172e9e144069769c3be73.jpg"
+    },
+    {
+      id: 409575,
+      name: "Pathfinder: Wrath of the Righteous",
+      background_image: "https://media.rawg.io/media/games/a20/a203f3f5d667e04ce4a2c482c7be3a47.jpg"
+    },
+    {
+      id: 977470,
+      name: "Elden Ring: Shadow of the Erdtree",
+      background_image: "https://media.rawg.io/media/screenshots/0ba/0bae7160eedc1f7d85a8d2db70cf1ec9.jpg"
+    },
+    {
+      id: 59611,
+      name: "Pathfinder: Kingmaker",
+      background_image: "https://media.rawg.io/media/games/4e6/4e6c6259ad910c31261d90b42c45e046.jpg"
+    },
+    {
+      id: 415171,
+      name: "Valorant",
+      background_image: "https://media.rawg.io/media/games/b11/b11127b9ee3c3701bd15b9af3286d20e.jpg"
+    }
+  ];
+  return gamesBanner;
+});
+
 // src/services/games-service.ts
 var key = process.env.KEY_GAMES;
 var topGamesAllTimeService = () => __async(void 0, null, function* () {
-  const response1 = yield apiGames.get(`/games?key=${key}&ordering=-metacritic&page_size=20`);
-  const response2 = yield apiGames.get(`/games?key=${key}&ordering=-added&page_size=20`);
-  const lista = [.../* @__PURE__ */ new Set([...response1.data.results, ...response2.data.results])];
+  const response1 = yield apiGames.get(
+    `/games?key=${key}&ordering=-metacritic&page_size=20`
+  );
+  const response2 = yield apiGames.get(
+    `/games?key=${key}&ordering=-added&page_size=20`
+  );
+  const lista = [
+    .../* @__PURE__ */ new Set([...response1.data.results, ...response2.data.results])
+  ];
   const response = lista.filter(
     (item, index, self) => index === self.findIndex((obj) => obj.id === item.id)
   );
   if (response) {
     const list = response;
-    const mostAdded = list.filter((item) => item.metacritic >= 85 && item.rating >= 4.3);
+    const mostAdded = list.filter(
+      (item) => item.metacritic >= 85 && item.rating >= 4.3
+    );
     mostAdded.sort(
       (a, b) => (
         //     //(b.ratings?.[0]?.count || 0) - (a.ratings?.[0]?.count || 0)
@@ -1114,7 +1131,9 @@ var topGamesAllTimeService = () => __async(void 0, null, function* () {
   }
 });
 var metacriticGamesService = () => __async(void 0, null, function* () {
-  const response = yield apiGames.get(`/games?key=${key}&ordering=-metacritic&page_size=20`);
+  const response = yield apiGames.get(
+    `/games?key=${key}&ordering=-metacritic&page_size=20`
+  );
   if (response) {
     const metacritic = response.data.results;
     const twentyMost = metacritic;
@@ -1134,7 +1153,9 @@ var getBannerService = () => __async(void 0, null, function* () {
 var trendingGamesService = () => __async(void 0, null, function* () {
   const datePast = yield getDataDoisMesesAtras();
   const dataFuture = yield getDataDoisAnosFuturo();
-  const response = yield apiGames.get(`/games?key=${key}&dates=${datePast},${dataFuture}&ordering=-added&page_size=20`);
+  const response = yield apiGames.get(
+    `/games?key=${key}&dates=${datePast},${dataFuture}&ordering=-added&page_size=20`
+  );
   if (response) {
     const trending = response.data.results;
     const twentyMost = trending;
@@ -1146,7 +1167,9 @@ var trendingGamesService = () => __async(void 0, null, function* () {
 var newReleasesService = () => __async(void 0, null, function* () {
   const dateNow = yield getDataAtual();
   const dataFuture = yield getDataDoisAnosFuturo();
-  const response = yield apiGames.get(`/games?key=${key}&dates=${dateNow},${dataFuture}&ordering=released&page_size=20`);
+  const response = yield apiGames.get(
+    `/games?key=${key}&dates=${dateNow},${dataFuture}&ordering=released&page_size=20`
+  );
   if (response) {
     const newRelieases = response.data.results;
     const twentyMost = newRelieases;
@@ -1156,7 +1179,9 @@ var newReleasesService = () => __async(void 0, null, function* () {
   }
 });
 var searchGameService = (game) => __async(void 0, null, function* () {
-  const response = yield apiGames.get(`/games?key=${key}&search=${game}&page_size=20`);
+  const response = yield apiGames.get(
+    `/games?key=${key}&search=${game}&page_size=20`
+  );
   if (response) {
     const gameSearch = response.data.results;
     const twentyMost = gameSearch;
@@ -1184,7 +1209,9 @@ var getDlcByIdService = (id) => __async(void 0, null, function* () {
   }
 });
 var getGameSeriesByIdService = (id) => __async(void 0, null, function* () {
-  const response = yield apiGames.get(`/games/${id}/game-series?key=${key}`);
+  const response = yield apiGames.get(
+    `/games/${id}/game-series?key=${key}`
+  );
   if (response) {
     const gameSearch = response.data.results;
     return ok(gameSearch);
@@ -1193,7 +1220,9 @@ var getGameSeriesByIdService = (id) => __async(void 0, null, function* () {
   }
 });
 var getParentGamesByIdService = (id) => __async(void 0, null, function* () {
-  const response = yield apiGames.get(`/games/${id}/parent-games?key=${key}`);
+  const response = yield apiGames.get(
+    `/games/${id}/parent-games?key=${key}`
+  );
   if (response) {
     const gameSearch = response.data.results;
     return ok(gameSearch);
@@ -1202,7 +1231,9 @@ var getParentGamesByIdService = (id) => __async(void 0, null, function* () {
   }
 });
 var getScreenshotsByIdService = (id) => __async(void 0, null, function* () {
-  const response = yield apiGames.get(`/games/${id}/screenshots?key=${key}`);
+  const response = yield apiGames.get(
+    `/games/${id}/screenshots?key=${key}`
+  );
   if (response) {
     const gameSearch = response.data.results;
     return ok(gameSearch);
@@ -1263,6 +1294,439 @@ var getScreenshotsById = (req, res) => __async(void 0, null, function* () {
   res.status(response.statusCode).json(response.body);
 });
 
+// src/repositories/myUserList-repository.ts
+var import_mongodb2 = require("mongodb");
+var import_dotenv2 = __toESM(require_main());
+import_dotenv2.default.config();
+var uri2 = process.env.MONGO_URI;
+var client2 = new import_mongodb2.MongoClient(uri2);
+var cachedDb2 = null;
+var connectDatabase2 = () => __async(void 0, null, function* () {
+  if (cachedDb2) {
+    return cachedDb2;
+  }
+  yield client2.connect();
+  const database = client2.db(process.env.DATABASE);
+  cachedDb2 = database.collection(process.env.COLLECTION_LIST);
+  return cachedDb2;
+});
+var getUserGameListRepository = (value) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  const filter = { user: value };
+  const result = yield collection.findOne(filter);
+  if (result) {
+    return result.gameList;
+  }
+  return;
+});
+var getUserWishListRepository = (value) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  const filter = { user: value };
+  const result = yield collection.findOne(filter);
+  if (result) {
+    return result.wishList;
+  }
+  return;
+});
+var createNewUserListRepository = (value) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  const filter = { user: value };
+  const result = yield collection.findOne(filter);
+  if (!result) {
+    const myUserList = {
+      user: value,
+      gameList: [],
+      wishList: []
+    };
+    yield collection.insertOne(myUserList);
+    return { message: "created" };
+  }
+  return;
+});
+var deleteUserList = (user) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  try {
+    const filter = { user };
+    const result = yield collection.deleteOne(filter);
+    if (result.deletedCount === 1) {
+      return { message: "deleted" };
+    } else {
+      return { message: "not found" };
+    }
+  } catch (error) {
+    return { message: "error", error: error.message };
+  }
+});
+var addGameListRepository = (user, body) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  const id = body.id;
+  try {
+    const filter = { user };
+    const filterGame = { "gameList.id": id };
+    const result1 = yield collection.findOne(filter);
+    const result2 = yield collection.findOne(filterGame);
+    if (result1 && !result2) {
+      const updateList = { $push: { gameList: body } };
+      const result = yield collection.updateOne(filter, updateList);
+      if (result.modifiedCount > 0) {
+        return { message: "updated" };
+      } else {
+        return { message: "erro" };
+      }
+    } else {
+      return { message: "erro" };
+    }
+  } catch (error) {
+    return { message: "error", error: error.message };
+  }
+});
+var addWishListRepository = (user, body) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  const id = body.id;
+  try {
+    const filter = { user };
+    const filterGame = { "wishList.id": id };
+    const result1 = yield collection.findOne(filter);
+    const result2 = yield collection.findOne(filterGame);
+    if (result1 && !result2) {
+      const updateList = { $push: { wishList: body } };
+      const result = yield collection.updateOne(filter, updateList);
+      if (result.modifiedCount > 0) {
+        return { message: "updated" };
+      } else {
+        return { message: "erro" };
+      }
+    } else {
+      return { message: "erro" };
+    }
+  } catch (error) {
+    return { message: "error", error: error.message };
+  }
+});
+var removeGameListRepository = (user, body) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  const id = body;
+  try {
+    const filter = { user };
+    const filterGame = { "gameList.id": id };
+    const result1 = yield collection.findOne(filter);
+    const result2 = yield collection.findOne(filterGame);
+    console.log(result2);
+    if (result1 && result2) {
+      const updateList = { $pull: { gameList: result2.gameList[0] } };
+      const result = yield collection.updateOne(filter, updateList);
+      if (result.modifiedCount > 0) {
+        return { message: "updated" };
+      } else {
+        return { message: "erro" };
+      }
+    } else {
+      return { message: "erro" };
+    }
+  } catch (error) {
+    return { message: "error", error: error.message };
+  }
+});
+var removeWishListRepository = (user, body) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  const id = body;
+  try {
+    const filter = { user };
+    const filterGame = { "wishList.id": id };
+    const result1 = yield collection.findOne(filter);
+    const result2 = yield collection.findOne(filterGame);
+    console.log(result2);
+    if (result1 && result2) {
+      const updateList = { $pull: { wishList: result2.wishList[0] } };
+      const result = yield collection.updateOne(filter, updateList);
+      if (result.modifiedCount > 0) {
+        return { message: "updated" };
+      } else {
+        return { message: "erro" };
+      }
+    } else {
+      return { message: "erro" };
+    }
+  } catch (error) {
+    return { message: "error", error: error.message };
+  }
+});
+var addGameListDescriptionRepository = (user, body) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  const id = body.id;
+  const description = body.description;
+  try {
+    console.log("repository");
+    const result = yield collection.updateOne(
+      { user, "gameList.id": id },
+      // Filtro
+      {
+        $set: {
+          "gameList.$.description": description
+          // Atualiza a descrição
+        }
+      }
+    );
+    if (result.modifiedCount > 0) {
+      return { message: "updated" };
+    } else {
+      return { message: "erro" };
+    }
+  } catch (error) {
+    return { message: "error", error: error.message };
+  }
+});
+var addWishListDescriptionRepository = (user, body) => __async(void 0, null, function* () {
+  const collection = yield connectDatabase2();
+  const id = body.id;
+  const description = body.description;
+  try {
+    console.log("repository");
+    const result = yield collection.updateOne(
+      { user, "wishList.id": id },
+      // Filtro
+      {
+        $set: {
+          "wishList.$.description": description
+          // Atualiza a descrição
+        }
+      }
+    );
+    if (result.modifiedCount > 0) {
+      return { message: "updated" };
+    } else {
+      return { message: "erro" };
+    }
+  } catch (error) {
+    return { message: "error", error: error.message };
+  }
+});
+
+// src/services/myList-service.ts
+var getUserGameListService = (authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  let response = null;
+  if (decoded) {
+    const data = yield getUserGameListRepository(decoded.user);
+    if (data) {
+      response = yield ok(data);
+    } else {
+      response = yield badRequest();
+    }
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+var getUserWishListService = (authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  let response = null;
+  if (decoded) {
+    const data = yield getUserWishListRepository(decoded.user);
+    if (data) {
+      response = yield ok(data);
+    } else {
+      response = yield badRequest();
+    }
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+var createNewUserListService = (authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  let response = null;
+  if (decoded) {
+    const data = yield createNewUserListRepository(decoded.user);
+    if (data) {
+      response = yield ok(data);
+    } else {
+      response = yield badRequest();
+    }
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+var addGameListService = (bodyValue, authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  let response = null;
+  const user = decoded.user;
+  if (decoded) {
+    const data = yield addGameListRepository(user, bodyValue);
+    if (data.message === "updated") {
+      response = yield ok(data);
+    } else if (data.message === "erro") {
+      response = yield conflict();
+    } else {
+      response = yield badRequest();
+    }
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+var addWishListService = (bodyValue, authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  let response = null;
+  const user = decoded.user;
+  if (decoded) {
+    const data = yield addWishListRepository(user, bodyValue);
+    if (data.message === "updated") {
+      response = yield ok(data);
+    } else if (data.message === "erro") {
+      response = yield conflict();
+    } else {
+      response = yield badRequest();
+    }
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+var removeGameListService = (gameId, authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  let response = null;
+  const user = decoded.user;
+  if (decoded) {
+    const data = yield removeGameListRepository(user, gameId);
+    if (data.message === "updated") {
+      response = yield ok(data);
+    } else if (data.message === "erro") {
+      response = yield conflict();
+    } else {
+      response = yield badRequest();
+    }
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+var removeWishListService = (gameId, authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  let response = null;
+  const user = decoded.user;
+  if (decoded) {
+    const data = yield removeWishListRepository(user, gameId);
+    if (data.message === "updated") {
+      response = yield ok(data);
+    } else if (data.message === "erro") {
+      response = yield conflict();
+    } else {
+      response = yield badRequest();
+    }
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+var addGameListDescriptionService = (bodyValue, authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  let response = null;
+  const user = decoded.user;
+  if (decoded) {
+    const data = yield addGameListDescriptionRepository(user, bodyValue);
+    if (data.message === "updated") {
+      response = yield ok(data);
+    } else if (data.message === "erro") {
+      response = yield conflict();
+    } else {
+      response = yield badRequest();
+    }
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+var addWishListDescriptionService = (bodyValue, authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  let response = null;
+  const user = decoded.user;
+  if (decoded) {
+    const data = yield addWishListDescriptionRepository(user, bodyValue);
+    if (data.message === "updated") {
+      response = yield ok(data);
+    } else if (data.message === "erro") {
+      response = yield conflict();
+    } else {
+      response = yield badRequest();
+    }
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+var deleteUserListService = (authHeader) => __async(void 0, null, function* () {
+  const decoded = yield auth(authHeader);
+  const user = decoded.user;
+  const data = yield deleteUserList(user);
+  let response = null;
+  if (data) {
+    response = yield ok(data);
+  } else {
+    response = yield badRequest();
+  }
+  return response;
+});
+
+// src/controllers/myList-constroller.ts
+var getUserGameList = (req, res) => __async(void 0, null, function* () {
+  const user = req.headers.authorization;
+  const response = yield getUserGameListService(user);
+  res.status(response.statusCode).json(response.body);
+});
+var getUserWishList = (req, res) => __async(void 0, null, function* () {
+  const user = req.headers.authorization;
+  const response = yield getUserWishListService(user);
+  res.status(response.statusCode).json(response.body);
+});
+var createUserList = (req, res) => __async(void 0, null, function* () {
+  const user = req.headers.authorization;
+  const response = yield createNewUserListService(user);
+  res.status(response.statusCode).json(response.body);
+});
+var addGameList = (req, res) => __async(void 0, null, function* () {
+  const authHeader = req.headers.authorization;
+  const bodyValue = req.body;
+  const response = yield addGameListService(bodyValue, authHeader);
+  res.status(response.statusCode).json(response.body);
+});
+var addWishList = (req, res) => __async(void 0, null, function* () {
+  const authHeader = req.headers.authorization;
+  const bodyValue = req.body;
+  const response = yield addWishListService(bodyValue, authHeader);
+  res.status(response.statusCode).json(response.body);
+});
+var removeGameList = (req, res) => __async(void 0, null, function* () {
+  const authHeader = req.headers.authorization;
+  const gameId = parseInt(req.params.id);
+  const response = yield removeGameListService(gameId, authHeader);
+  res.status(response.statusCode).json(response.body);
+});
+var removeWishList = (req, res) => __async(void 0, null, function* () {
+  const authHeader = req.headers.authorization;
+  const gameId = parseInt(req.params.id);
+  const response = yield removeWishListService(gameId, authHeader);
+  res.status(response.statusCode).json(response.body);
+});
+var addGameListDescription = (req, res) => __async(void 0, null, function* () {
+  const authHeader = req.headers.authorization;
+  const bodyValue = req.body;
+  const response = yield addGameListDescriptionService(bodyValue, authHeader);
+  res.status(response.statusCode).json(response.body);
+});
+var addWishListDescription = (req, res) => __async(void 0, null, function* () {
+  const authHeader = req.headers.authorization;
+  const bodyValue = req.body;
+  const response = yield addWishListDescriptionService(bodyValue, authHeader);
+  res.status(response.statusCode).json(response.body);
+});
+var deleteUserList2 = (req, res) => __async(void 0, null, function* () {
+  const authHeader = req.headers.authorization;
+  const response = yield deleteUserListService(authHeader);
+  res.status(response.statusCode).json(response.body);
+});
+
 // src/routes.ts
 var router = (0, import_express.Router)();
 router.get("/login/protected", getProtegido);
@@ -1285,6 +1749,16 @@ router.get("/games/getDlc/:id", getDlcById);
 router.get("/games/getGameSeries/:id", getGameSeriesById);
 router.get("/games/getParentGames/:id", getParentGamesById);
 router.get("/games/getScreenshots/:id", getScreenshotsById);
+router.get("/myList/create", createUserList);
+router.get("/myList/GameList", getUserGameList);
+router.get("/myList/WishList", getUserWishList);
+router.patch("/myList/addGameList", addGameList);
+router.patch("/myList/removeGameList/:id", removeGameList);
+router.patch("/myList/addGameListDescription", addGameListDescription);
+router.patch("/myList/addWishList", addWishList);
+router.patch("/myList/removeWishList/:id", removeWishList);
+router.patch("/myList/addWishListDescription", addWishListDescription);
+router.delete("/myList/delete", deleteUserList2);
 var routes_default = router;
 
 // src/app.ts
