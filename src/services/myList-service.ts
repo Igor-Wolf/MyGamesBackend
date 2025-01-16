@@ -137,9 +137,9 @@ export const removeGameListService = async (
 ) => {
   const decoded: any = await auth(authHeader);
   let response = null;
-  const user = decoded.user;
+  const user = decoded?.user;
 
-  if (decoded) {
+  if (decoded && user) {
     const data = await removeGameListRepository(user, gameId);
 
     if (data.message === "updated") {
