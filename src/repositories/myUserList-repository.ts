@@ -162,9 +162,8 @@ export const removeGameListRepository = async (user: string, body: number) => {
 
     const result1 = await collection.findOne(filter);
     const result2 = await collection.findOne(filterGame);
-    console.log(result2);
     if (result1 && result2) {
-      const updateList = { $pull: { gameList: result2.gameList[0] } };
+      const updateList = { $pull: { gameList: { id: id } } };
       const result = await collection.updateOne(filter, updateList);
 
       if (result.modifiedCount > 0) {
@@ -190,7 +189,7 @@ export const removeWishListRepository = async (user: string, body: number) => {
     const result2 = await collection.findOne(filterGame);
     console.log(result2);
     if (result1 && result2) {
-      const updateList = { $pull: { wishList: result2.wishList[0] } };
+      const updateList = { $pull: { wishList: { id: id } } };
       const result = await collection.updateOne(filter, updateList);
 
       if (result.modifiedCount > 0) {

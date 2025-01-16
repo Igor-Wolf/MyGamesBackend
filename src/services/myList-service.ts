@@ -138,6 +138,8 @@ export const removeGameListService = async (
   const decoded: any = await auth(authHeader);
   let response = null;
   const user = await decoded?.user;
+  console.log(user)
+  console.log(decoded)
 
   if (decoded && user) {
     const data = await removeGameListRepository(user, gameId);

@@ -1411,9 +1411,8 @@ var removeGameListRepository = (user, body) => __async(void 0, null, function* (
     const filterGame = { "gameList.id": id };
     const result1 = yield collection.findOne(filter);
     const result2 = yield collection.findOne(filterGame);
-    console.log(result2);
     if (result1 && result2) {
-      const updateList = { $pull: { gameList: result2.gameList[0] } };
+      const updateList = { $pull: { gameList: { id } } };
       const result = yield collection.updateOne(filter, updateList);
       if (result.modifiedCount > 0) {
         return { message: "updated" };
@@ -1437,7 +1436,7 @@ var removeWishListRepository = (user, body) => __async(void 0, null, function* (
     const result2 = yield collection.findOne(filterGame);
     console.log(result2);
     if (result1 && result2) {
-      const updateList = { $pull: { wishList: result2.wishList[0] } };
+      const updateList = { $pull: { wishList: { id } } };
       const result = yield collection.updateOne(filter, updateList);
       if (result.modifiedCount > 0) {
         return { message: "updated" };
@@ -1588,6 +1587,8 @@ var removeGameListService = (gameId, authHeader) => __async(void 0, null, functi
   const decoded = yield auth(authHeader);
   let response = null;
   const user = yield decoded == null ? void 0 : decoded.user;
+  console.log(user);
+  console.log(decoded);
   if (decoded && user) {
     const data = yield removeGameListRepository(user, gameId);
     if (data.message === "updated") {
