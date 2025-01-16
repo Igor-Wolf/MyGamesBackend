@@ -1699,6 +1699,7 @@ var addWishList = (req, res) => __async(void 0, null, function* () {
 });
 var removeGameList = (req, res) => __async(void 0, null, function* () {
   const authHeader = req.headers.authorization;
+  console.log(authHeader);
   const gameId = parseInt(req.params.id);
   const response = yield removeGameListService(gameId, authHeader);
   res.status(response.statusCode).json(response.body);

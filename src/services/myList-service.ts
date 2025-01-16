@@ -133,7 +133,7 @@ export const addWishListService = async (
 };
 export const removeGameListService = async (
   gameId: number,
-  authHeader: string | undefined
+  authHeader: string 
 ) => {
   const decoded: any = await auth(authHeader);
   let response = null;

@@ -48,6 +48,7 @@ export const addWishList = async (req: Request, res: Response) => {
 };
 export const removeGameList = async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
+  console.log(authHeader)
   const gameId  = parseInt(req.params.id);
 
   const response = await removeGameListService(gameId, authHeader);
