@@ -133,11 +133,11 @@ export const addWishListService = async (
 };
 export const removeGameListService = async (
   gameId: number,
-  authHeader: string 
+  authHeader: string | undefined 
 ) => {
   const decoded: any = await auth(authHeader);
   let response = null;
-  const user = decoded?.user;
+  const user = await decoded?.user;
 
   if (decoded && user) {
     const data = await removeGameListRepository(user, gameId);

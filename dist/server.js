@@ -1587,7 +1587,7 @@ var addWishListService = (bodyValue, authHeader) => __async(void 0, null, functi
 var removeGameListService = (gameId, authHeader) => __async(void 0, null, function* () {
   const decoded = yield auth(authHeader);
   let response = null;
-  const user = decoded == null ? void 0 : decoded.user;
+  const user = yield decoded == null ? void 0 : decoded.user;
   if (decoded && user) {
     const data = yield removeGameListRepository(user, gameId);
     if (data.message === "updated") {
