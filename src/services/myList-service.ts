@@ -30,7 +30,7 @@ export const getUserGameListService = async (
 
   if (decoded) {
     const data = await getUserGameListRepository(decoded.user);
-
+    data?.sort((a: any, b: any) => a.name.localeCompare(b.name));
     if (data) {
       response = await ok(data);
     } else {
@@ -50,6 +50,7 @@ export const getUserWishListService = async (
 
   if (decoded) {
     const data = await getUserWishListRepository(decoded.user);
+    data?.sort((a: any, b: any) => a.name.localeCompare(b.name));
 
     if (data) {
       response = await ok(data);
@@ -133,13 +134,13 @@ export const addWishListService = async (
 };
 export const removeGameListService = async (
   gameId: number,
-  authHeader: string | undefined 
+  authHeader: string | undefined
 ) => {
   const decoded: any = await auth(authHeader);
   let response = null;
   const user = await decoded?.user;
-  console.log(user)
-  console.log(decoded)
+  console.log(user);
+  console.log(decoded);
 
   if (decoded && user) {
     const data = await removeGameListRepository(user, gameId);

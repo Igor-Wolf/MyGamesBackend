@@ -1507,6 +1507,7 @@ var getUserGameListService = (authHeader) => __async(void 0, null, function* () 
   let response = null;
   if (decoded) {
     const data = yield getUserGameListRepository(decoded.user);
+    data == null ? void 0 : data.sort((a, b) => a.name.localeCompare(b.name));
     if (data) {
       response = yield ok(data);
     } else {
@@ -1522,6 +1523,7 @@ var getUserWishListService = (authHeader) => __async(void 0, null, function* () 
   let response = null;
   if (decoded) {
     const data = yield getUserWishListRepository(decoded.user);
+    data == null ? void 0 : data.sort((a, b) => a.name.localeCompare(b.name));
     if (data) {
       response = yield ok(data);
     } else {

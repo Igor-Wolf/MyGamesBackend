@@ -4,5 +4,8 @@ export interface MyUserListGameModel {
   name: string;
   background_image: string;
   description: string | null;
+  released: string;
+  genres: [  
+  ]
 
 }
