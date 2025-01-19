@@ -2,6 +2,7 @@ import { Router } from "express"
 import { autenticateAccountByEmail, createUser, deleteUser, forgotPass, getMyAcount, getProtegido, newPassword, updateUser, userAutentication } from "./controllers/login-controller"
 import { getBanner, getDlcById, getGameById, getGameSeriesById, getParentGamesById, getScreenshotsById, metacriticGames, newReleases, searchGame, topGamesAllTime, trendingGames } from "./controllers/games-controller"
 import { addGameList, addGameListDescription, addWishList, addWishListDescription, createUserList, deleteUserList, getUserGameList, getUserWishList, removeGameList, removeWishList } from "./controllers/myList-constroller"
+import { getGameInfoById, getHistoryLogById, postPricesGeneralById, postPricesOverviewById, searchGamePrice } from "./controllers/prices-controller"
 
 
 const router = Router()
@@ -80,10 +81,25 @@ router.patch("/myList/addWishListDescription", addWishListDescription)
 router.delete("/myList/delete", deleteUserList)
 
 
+//----------------------------------------------------------------------------------------------------------- Prices
 
 
 
+//------------------------------------------------------------------------------------ GET
 
+
+router.get("/prices/search/:game", searchGamePrice)
+router.get("/prices/game/:id", getGameInfoById)
+
+
+router.get("/prices/historyLog/:id", getHistoryLogById) // precisa receber do front o country do navegador pela rota &country=BR
+
+
+//------------------------------------------------------------------------------------ POST
+
+
+router.post("/prices/overview/:country", postPricesOverviewById)
+router.post("/prices/general/:country", postPricesGeneralById)
 
 
 

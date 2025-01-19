@@ -9,7 +9,7 @@ var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key2, value) => key2 in obj ? __defProp(obj, key2, { enumerable: true, configurable: true, writable: true, value }) : obj[key2] = value;
+var __defNormalProp = (obj, key3, value) => key3 in obj ? __defProp(obj, key3, { enumerable: true, configurable: true, writable: true, value }) : obj[key3] = value;
 var __spreadValues = (a, b) => {
   for (var prop in b || (b = {}))
     if (__hasOwnProp.call(b, prop))
@@ -27,9 +27,9 @@ var __commonJS = (cb, mod) => function __require() {
 };
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
-    for (let key2 of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key2) && key2 !== except)
-        __defProp(to, key2, { get: () => from[key2], enumerable: !(desc = __getOwnPropDesc(from, key2)) || desc.enumerable });
+    for (let key3 of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key3) && key3 !== except)
+        __defProp(to, key3, { get: () => from[key3], enumerable: !(desc = __getOwnPropDesc(from, key3)) || desc.enumerable });
   }
   return to;
 };
@@ -150,7 +150,7 @@ var require_main = __commonJS({
       lines = lines.replace(/\r\n?/mg, "\n");
       let match;
       while ((match = LINE.exec(lines)) != null) {
-        const key2 = match[1];
+        const key3 = match[1];
         let value = match[2] || "";
         value = value.trim();
         const maybeQuote = value[0];
@@ -159,7 +159,7 @@ var require_main = __commonJS({
           value = value.replace(/\\n/g, "\n");
           value = value.replace(/\\r/g, "\r");
         }
-        obj[key2] = value;
+        obj[key3] = value;
       }
       return obj;
     }
@@ -176,8 +176,8 @@ var require_main = __commonJS({
       let decrypted;
       for (let i = 0; i < length; i++) {
         try {
-          const key2 = keys[i].trim();
-          const attrs = _instructions(result, key2);
+          const key3 = keys[i].trim();
+          const attrs = _instructions(result, key3);
           decrypted = DotenvModule.decrypt(attrs.ciphertext, attrs.key);
           break;
         } catch (error) {
@@ -218,8 +218,8 @@ var require_main = __commonJS({
         }
         throw error;
       }
-      const key2 = uri3.password;
-      if (!key2) {
+      const key3 = uri3.password;
+      if (!key3) {
         const err = new Error("INVALID_DOTENV_KEY: Missing key part");
         err.code = "INVALID_DOTENV_KEY";
         throw err;
@@ -237,7 +237,7 @@ var require_main = __commonJS({
         err.code = "NOT_FOUND_DOTENV_ENVIRONMENT";
         throw err;
       }
-      return { ciphertext, key: key2 };
+      return { ciphertext, key: key3 };
     }
     function _vaultPath(options) {
       let possibleVaultPath = null;
@@ -330,13 +330,13 @@ var require_main = __commonJS({
       return DotenvModule._configVault(options);
     }
     function decrypt(encrypted, keyStr) {
-      const key2 = Buffer.from(keyStr.slice(-64), "hex");
+      const key3 = Buffer.from(keyStr.slice(-64), "hex");
       let ciphertext = Buffer.from(encrypted, "base64");
       const nonce = ciphertext.subarray(0, 12);
       const authTag = ciphertext.subarray(-16);
       ciphertext = ciphertext.subarray(12, -16);
       try {
-        const aesgcm = crypto.createDecipheriv("aes-256-gcm", key2, nonce);
+        const aesgcm = crypto.createDecipheriv("aes-256-gcm", key3, nonce);
         aesgcm.setAuthTag(authTag);
         return `${aesgcm.update(ciphertext)}${aesgcm.final()}`;
       } catch (error) {
@@ -364,20 +364,20 @@ var require_main = __commonJS({
         err.code = "OBJECT_REQUIRED";
         throw err;
       }
-      for (const key2 of Object.keys(parsed)) {
-        if (Object.prototype.hasOwnProperty.call(processEnv, key2)) {
+      for (const key3 of Object.keys(parsed)) {
+        if (Object.prototype.hasOwnProperty.call(processEnv, key3)) {
           if (override === true) {
-            processEnv[key2] = parsed[key2];
+            processEnv[key3] = parsed[key3];
           }
           if (debug) {
             if (override === true) {
-              _debug(`"${key2}" is already defined and WAS overwritten`);
+              _debug(`"${key3}" is already defined and WAS overwritten`);
             } else {
-              _debug(`"${key2}" is already defined and was NOT overwritten`);
+              _debug(`"${key3}" is already defined and was NOT overwritten`);
             }
           }
         } else {
-          processEnv[key2] = parsed[key2];
+          processEnv[key3] = parsed[key3];
         }
       }
     }
@@ -1035,6 +1035,12 @@ var deleteUser = (req, res) => __async(void 0, null, function* () {
 var import_axios = __toESM(require("axios"));
 var apiGames = import_axios.default.create({
   baseURL: "https://api.rawg.io/api",
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
+var apiPrices = import_axios.default.create({
+  baseURL: "https://api.isthereanydeal.com/games",
   headers: {
     "Content-Type": "application/json"
   }
@@ -1731,6 +1737,100 @@ var deleteUserList2 = (req, res) => __async(void 0, null, function* () {
   res.status(response.statusCode).json(response.body);
 });
 
+// src/services/prices-services.ts
+var key2 = process.env.KEY_PRICES;
+var searchGamePriceService = (game) => __async(void 0, null, function* () {
+  const response = yield apiPrices.get(
+    `/search/v1?key=${key2}&title=${game}`
+  );
+  if (response) {
+    const gameSearch = response.data;
+    const twentyMost = gameSearch;
+    return ok(twentyMost);
+  } else {
+    return noContent();
+  }
+});
+var getGameInfoByIdService = (id) => __async(void 0, null, function* () {
+  const response = yield apiPrices.get(
+    `/info/v2?key=${key2}&id=${id}`
+  );
+  if (response) {
+    const gameSearch = response.data;
+    return ok(gameSearch);
+  } else {
+    return noContent();
+  }
+});
+var getHistoryLogByIdService = (id) => __async(void 0, null, function* () {
+  const response = yield apiPrices.get(
+    `/history/v2?key=${key2}&id=${id}`
+  );
+  if (response) {
+    const gameSearch = response.data;
+    return ok(gameSearch);
+  } else {
+    return noContent();
+  }
+});
+var postPricesOverviewByIdService = (id, country) => __async(void 0, null, function* () {
+  const response = yield apiPrices.post(
+    `/overview/v2?key=${key2}&country=${country}`,
+    [
+      id
+    ]
+  );
+  if (response) {
+    const gameSearch = response.data;
+    return ok(gameSearch);
+  } else {
+    return noContent();
+  }
+});
+var postPricesGeneralByIdService = (id, country) => __async(void 0, null, function* () {
+  const response = yield apiPrices.post(
+    `/prices/v3?key=${key2}&country=${country}`,
+    [
+      id
+    ]
+  );
+  if (response) {
+    const gameSearch = response.data;
+    return ok(gameSearch);
+  } else {
+    return noContent();
+  }
+});
+
+// src/controllers/prices-controller.ts
+var searchGamePrice = (req, res) => __async(void 0, null, function* () {
+  const game = req.params.game;
+  const response = yield searchGamePriceService(game);
+  res.status(response.statusCode).json(response.body);
+});
+var getGameInfoById = (req, res) => __async(void 0, null, function* () {
+  const id = req.params.id;
+  const response = yield getGameInfoByIdService(id);
+  res.status(response.statusCode).json(response.body);
+});
+var getHistoryLogById = (req, res) => __async(void 0, null, function* () {
+  const id = req.params.id;
+  const response = yield getHistoryLogByIdService(id);
+  res.status(response.statusCode).json(response.body);
+});
+var postPricesOverviewById = (req, res) => __async(void 0, null, function* () {
+  const id = req.body;
+  const country = req.params.country;
+  const response = yield postPricesOverviewByIdService(id[0], country);
+  res.status(response.statusCode).json(response.body);
+});
+var postPricesGeneralById = (req, res) => __async(void 0, null, function* () {
+  const id = req.body;
+  const country = req.params.country;
+  const response = yield postPricesGeneralByIdService(id[0], country);
+  res.status(response.statusCode).json(response.body);
+});
+
 // src/routes.ts
 var router = (0, import_express.Router)();
 router.get("/login/protected", getProtegido);
@@ -1763,6 +1863,11 @@ router.patch("/myList/addWishList", addWishList);
 router.patch("/myList/removeWishList/:id", removeWishList);
 router.patch("/myList/addWishListDescription", addWishListDescription);
 router.delete("/myList/delete", deleteUserList2);
+router.get("/prices/search/:game", searchGamePrice);
+router.get("/prices/game/:id", getGameInfoById);
+router.get("/prices/historyLog/:id", getHistoryLogById);
+router.post("/prices/overview/:country", postPricesOverviewById);
+router.post("/prices/general/:country", postPricesGeneralById);
 var routes_default = router;
 
 // src/app.ts

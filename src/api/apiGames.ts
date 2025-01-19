@@ -6,3 +6,11 @@ export const apiGames = axios.create({
       'Content-Type': 'application/json',
     }
 })
+
+
+export const apiPrices = axios.create({
+    baseURL: 'https://api.isthereanydeal.com/games',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+})
