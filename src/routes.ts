@@ -99,7 +99,7 @@ router.get("/prices/historyLog/:id", getHistoryLogById) // precisa receber do fr
 
 
 router.post("/prices/overview/:country", postPricesOverviewById)
-router.post("/prices/general/:country", postPricesGeneralById)
+router.post("/prices/general/:country", postPricesGeneralById) // principal
 
 
 
